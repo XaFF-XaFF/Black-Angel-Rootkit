@@ -1,7 +1,7 @@
 #pragma once
 
 // Remove to show output
-//#define DISABLE_OUTPUT
+// #define DISABLE_OUTPUT
 
 #if defined(DISABLE_OUTPUT)
 #define Log(content) 

