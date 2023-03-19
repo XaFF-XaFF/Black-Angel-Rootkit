@@ -59,13 +59,11 @@ namespace Rootkit
 
 		typedef struct MmCopyVirtualMemoryStruct
 		{
-			PEPROCESS SourceProcess;
+			ULONG SourceProcessPid;
 			PVOID SourceAddress;
-			PEPROCESS TargetProcess;
+			ULONG TargetProcessPid;
 			PVOID TargetAddress;
 			SIZE_T BufferSize;
-			KPROCESSOR_MODE PreviousMode;
-			PSIZE_T ReturnSize;
 		} mcvm_t;
 		NTSTATUS MmCopyVirtualMemory(mcvm_t* mcvm);
 	}
