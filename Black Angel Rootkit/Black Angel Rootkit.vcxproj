@@ -129,15 +129,15 @@
     <ClInclude Include="util.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dispatcher.cpp" />
-    <ClCompile Include="driver.cpp" />
+    <ClCompile Include="Dispatch.cpp" />
+    <ClCompile Include="Driver.cpp" />
     <ClCompile Include="FastMutex.cpp" />
-    <ClCompile Include="hijack.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="nsi.cpp" />
-    <ClCompile Include="rootkit.cpp" />
-    <ClCompile Include="util.cpp" />
-    <ClCompile Include="utils.cpp" />
+    <ClCompile Include="Hijack.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MalwareKit.cpp" />
+    <ClCompile Include="Nsi.cpp" />
+    <ClCompile Include="ProcessKit.cpp" />
+    <ClCompile Include="Util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <MASM Include="cfguard.asm" />

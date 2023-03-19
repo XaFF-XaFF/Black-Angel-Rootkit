@@ -57,28 +57,28 @@
     <ClCompile Include="FastMutex.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="nsi.cpp">
+    <ClCompile Include="Nsi.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dispatcher.cpp">
+    <ClCompile Include="Dispatch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="driver.cpp">
+    <ClCompile Include="Driver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="hijack.cpp">
+    <ClCompile Include="Hijack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="rootkit.cpp">
+    <ClCompile Include="Util.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="util.cpp">
+    <ClCompile Include="ProcessKit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="utils.cpp">
+    <ClCompile Include="MalwareKit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

