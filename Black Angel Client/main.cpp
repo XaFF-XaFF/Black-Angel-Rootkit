@@ -83,15 +83,6 @@ int main()
         std::cout << "6. Hide File\n";
         std::cout << "7. Hide Directory\n";
         std::cout << "8. Hide Registry Key\n";
-        std::cout << "- Inject Shellcode\n\n";
-        std::cout << "--- Malware support: ---\n";
-        std::cout << "- Query information process\n";
-        std::cout << "- Unmap view of section\n";
-        std::cout << "- Allocate virutal memory\n";
-        std::cout << "- Write virtual memory\n";
-        std::cout << "- Read virtual memory\n";
-        std::cout << "- Copy memory\n";
-        std::cout << "- Protect virtual memory\n";
         std::cout << "99. Exit\n";
         std::cout << "Option: "; std::cin >> option;
 

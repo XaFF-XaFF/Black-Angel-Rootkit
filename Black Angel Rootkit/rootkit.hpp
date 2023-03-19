@@ -66,6 +66,23 @@ namespace Rootkit
 			SIZE_T BufferSize;
 		} mcvm_t;
 		NTSTATUS MmCopyVirtualMemory(mcvm_t* mcvm);
+
+		typedef struct ZwQueryInformationProcessStruct
+		{
+			HANDLE           ProcessHandle;
+			PROCESSINFOCLASS ProcessInformationClass;
+			PVOID            ProcessInformation;
+			ULONG            ProcessInformationLength;
+			PULONG           ReturnLength;
+		} zqip_t;
+		NTSTATUS ZwQueryInformationProcess(zqip_t* zqip);
+
+		typedef struct ZwUnmapViewOfSectionStruct
+		{
+			HANDLE ProcessHandle;
+			PVOID  BaseAddress;
+		} zuvos_t;
+		NTSTATUS ZwUnmapViewOfSection(zuvos_t* zuvos);
 	}
 
 	extern "C"
@@ -113,6 +130,21 @@ namespace Rootkit
 			IN ULONG NewAccessProtection,
 			OUT PULONG OldAccessProtection
 		);
+
+	extern "C"
+		NTSTATUS NTAPI ZwQueryInformationProcess(
+			_In_      HANDLE           ProcessHandle,
+			_In_      PROCESSINFOCLASS ProcessInformationClass,
+			_Out_     PVOID            ProcessInformation,
+			_In_      ULONG            ProcessInformationLength,
+			_Out_opt_ PULONG           ReturnLength
+		);
+
+	extern "C"
+		NTSTATUS NTAPI ZwUnmapViewOfSection(
+			_In_      HANDLE ProcessHandle,
+			_In_opt_  PVOID  BaseAddress
+	);
 }
 
 namespace Utils
