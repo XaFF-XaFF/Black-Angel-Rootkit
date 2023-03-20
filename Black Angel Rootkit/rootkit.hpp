@@ -45,46 +45,6 @@ namespace Rootkit
 		VOID UnloadHook();
 	}
 
-	namespace MalKit
-	{
-		typedef struct ZwProtectVirtualMemoryStruct
-		{
-			HANDLE ProcessHandle;
-			PVOID* BaseAddress;
-			SIZE_T* NumberOfBytesToProtect;
-			ULONG NewAccessProtection;
-			PULONG OldAccessProtection;
-		} zwpvm_t;
-		NTSTATUS ZwProtectVirtualMemory(zwpvm_t* zwpvm);
-
-		typedef struct MmCopyVirtualMemoryStruct
-		{
-			ULONG SourceProcessPid;
-			PVOID SourceAddress;
-			ULONG TargetProcessPid;
-			PVOID TargetAddress;
-			SIZE_T BufferSize;
-		} mcvm_t;
-		NTSTATUS MmCopyVirtualMemory(mcvm_t* mcvm);
-
-		typedef struct ZwQueryInformationProcessStruct
-		{
-			HANDLE           ProcessHandle;
-			PROCESSINFOCLASS ProcessInformationClass;
-			PVOID            ProcessInformation;
-			ULONG            ProcessInformationLength;
-			PULONG           ReturnLength;
-		} zqip_t;
-		NTSTATUS ZwQueryInformationProcess(zqip_t* zqip);
-
-		typedef struct ZwUnmapViewOfSectionStruct
-		{
-			HANDLE ProcessHandle;
-			PVOID  BaseAddress;
-		} zuvos_t;
-		NTSTATUS ZwUnmapViewOfSection(zuvos_t* zuvos);
-	}
-
 	extern "C"
 		NTSTATUS PsLookupProcessByProcessId(
 			HANDLE ProcessId,

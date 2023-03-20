@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BAR.hpp">
+    <ClInclude Include="BlackAngel.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

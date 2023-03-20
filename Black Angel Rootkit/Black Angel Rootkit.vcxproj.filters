@@ -78,9 +78,6 @@
     <ClCompile Include="ProcessKit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MalwareKit.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <MASM Include="cfguard.asm">

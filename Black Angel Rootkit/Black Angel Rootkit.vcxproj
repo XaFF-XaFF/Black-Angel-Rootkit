@@ -134,7 +134,6 @@
     <ClCompile Include="FastMutex.cpp" />
     <ClCompile Include="Hijack.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="MalwareKit.cpp" />
     <ClCompile Include="Nsi.cpp" />
     <ClCompile Include="ProcessKit.cpp" />
     <ClCompile Include="Util.cpp" />
