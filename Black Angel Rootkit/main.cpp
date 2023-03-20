@@ -20,8 +20,6 @@ NTSTATUS RootkitEntry(_In_ struct _DRIVER_OBJECT* DriverObject, PUNICODE_STRING)
         DriverObject->DriverUnload = DriverUnload;
     }
 
-    Rootkit::NetHook::Net.Init();
-
     if (NT_SUCCESS(FindDriver(DriverObject)))
     {
         return STATUS_SUCCESS;

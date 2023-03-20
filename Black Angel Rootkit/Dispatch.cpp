@@ -167,10 +167,16 @@ NTSTATUS Dispatch::DriverDispatch(_In_ PDEVICE_OBJECT DeviceObject, _In_ PIRP Ir
 
     case IOCTL_SHELL:
     {
+#if DEBUG
+        DbgPrint("[+] Received request to inject shellcode\n");
+#endif
+
         Shell* shell = (Shell*)Irp->AssociatedIrp.SystemBuffer;
         if (shell == NULL)
         {
+#if DEBUG
             DbgPrint("[-] Received empty buffer\n");
+#endif
 
             status = STATUS_INVALID_PARAMETER;
             break;
@@ -178,7 +184,9 @@ NTSTATUS Dispatch::DriverDispatch(_In_ PDEVICE_OBJECT DeviceObject, _In_ PIRP Ir
 
         if (shell->pid == NULL || shell->shellcode == NULL || shell->size == NULL)
         {
+#if DEBUG
             DbgPrint("[-] Received empty parameter\n");
+#endif
 
             status = STATUS_INVALID_PARAMETER;
             break;

