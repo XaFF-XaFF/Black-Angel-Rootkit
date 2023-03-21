@@ -23,6 +23,9 @@ Rootkit can be loaded with [kdmapper](https://github.com/TheCruZ/kdmapper) to by
 ## Implementation
 You can easily implement rootkit calls by copying and pasting [BlackAngel header](https://github.com/XaFF-XaFF/Black-Angel-Rootkit/blob/master/Black%20Angel%20Client/BlackAngel.hpp) file into your project.
 
+## Demonstration
+You can find rootkit demonstration on my [channel](https://www.youtube.com/watch?v=YN5A-d0iljI)
+
 ## Additional Info
 - Remember to change [ACTIVE_PROCESS_LINKS](https://github.com/XaFF-XaFF/Black-Angel-Rootkit/blob/f4a5c762ae864b7395a6a03b8d46fdeda6a8bb25/Black%20Angel%20Rootkit/rootkit.hpp#L7) offset corresponding to your Windows versions. Current offset has been tested on Windows 10/11 Pro 21H2.
 - There may still be stability issues!
