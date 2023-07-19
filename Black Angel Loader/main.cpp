@@ -47,9 +47,13 @@ bool callbackExample(ULONG64* param1, ULONG64* param2, ULONG64 allocationPtr, UL
 	*/
 	return true;
 }
-
 int wmain(const int argc, wchar_t** argv) {
 	SetUnhandledExceptionFilter(SimplestCrashHandler);
+
+	iqvw64e_device_handle = intel_driver::Load();
+
+	if (iqvw64e_device_handle == INVALID_HANDLE_VALUE)
+		return -1;
 
 	NTSTATUS exitCode = 0;
 	if (!kdmapper::MapDriver(iqvw64e_device_handle, rootkit, 0, 0, false, true, false, false, callbackExample, &exitCode)) {
